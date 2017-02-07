@@ -1,46 +1,343 @@
 # Class: linux_hardening
 # ===========================
 #
-# Full description of class linux_hardening here.
+# This class improved security on Linux
 #
 # Parameters
 # ----------
 #
-# Document parameters here.
 #
-# * `sample parameter`
-# Explanation of what this parameter affects and what it defaults to.
-# e.g. "Specify one or more upstream ntp servers as an array."
+### SELINUX
 #
-# Variables
-# ----------
 #
-# Here you should define a list of variables that this module would require.
+# [*selinux_mode*]
+#  Set mod selinux: enforcing, permissive or disabled.
 #
-# * `sample variable`
-#  Explanation of how this variable affects the function of this class and if
-#  it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#  External Node Classifier as a comma separated list of hostnames." (Note,
-#  global variables should be avoided in favor of class parameters as
-#  of Puppet 2.6.)
+#  Default:  enforcing
 #
-# Examples
-# --------
+# [*selinux_boolean_execstack*]
+#  Disable selinuxuser to execstack.
 #
-# @example
-#    class { 'linux_hardening':
-#      servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
-#    }
+#  Default:  false
 #
-# Authors
+# [*boolean_execheap]
+#  Disable selinuxuser to execheap.
+#
+#  Default:  false
+#
+# [*selinux_boolean_virt_use_usb*]
+#  Disable virt to use usb.
+#
+#  Default:  false
+#
+# [*selinux_boolean_deny_ptrace*]
+#  Allow deny to ptrace.
+#
+#  Default:  true
+#
+#
+### AUDIT
+#
+#
+# [*audit_access*]
+#  Log audit access.
+#
+#  Default:  true
+#
+# [*audit_actions*]
+#  Log audit action.
+#
+#  Default:  true
+#
+# [*audit_networkconfig*]
+#  Record events that modify network.
+#
+#  Default:  true
+#
+# [*audit_usergroup*]
+#  Records events that modify on users and groups.
+#
+#  Default:  true
+#
+# [*audit_time*]
+#  Records events that modify date information.
+#
+#  Default:  true
+#
+# [*audit_delete*]
+#  Record events log modifications when deleting files or directory.
+#
+#  Default:  true
+#
+# [*audit_export*]
+#  Record events modification when mount filesystem.
+#
+#  Default:  true
+#
+# [*audit_immutable*]
+#  Set audit config unchangeable.
+#
+#  Default:  true
+#
+# [*audit_logins*]
+#  Record events on logins.
+#
+#  Default:  true
+#
+# [*audit_mac_policy*]
+#  Record events that modify policy SELinux.
+#
+#  Default:  true
+#
+# [*audit_modules*]
+#  Record events on insmod, rmmod and modprobe.
+#
+#  Default:  true
+#
+# [*audit_perm_mod*]
+#  Record events that modification permissions.
+#
+#  Default:  true
+#
+# [*audit_privileged*]
+#  Record events on commande line privileges.
+#
+#  Default:  true
+#
+# [*audit_session*]
+#  Record events on session with utmp, btmp and wtmp.
+#
+#  Default:  true
+#
+# [*audit_time_change*]
+#  Record events that modify clock set time.
+#
+#  Default:  true
+#
+# [*audit_admin_action_low_disk*]
+#  Configure auditd admin_space_left action on low disk space.
+#
+#  Default:  true
+#
+# [*audit_action_low_disk*]
+#  Configure audit space_left action on low disk space.
+#
+#  Default:  true
+#
+# [*audit_flush_priority*]
+#  Configure auditd flush priority.
+#
+#  Default:  true
+#
+# [*audit_syslog*]
+#  Configure auditd to use audispd syslog plugin.
+#
+#  Default:  false
+#
+#
+### FILESYSTEM
+#
+#
+# [*filesystem_logfiles_perm*]
+#  Set permissions on: /var/log/messages 
+#                      /var/log/secure
+#                      /var/log/maillog
+#                      /var/log/spooler
+#                      /var/log/cron
+#                      /var/log/boot.log
+#
+#  Default:  '0600'
+#
+#
+### SYSCTL
+#
+#
+# [*kernel_basic_ipv4_net_sysctl*]
+#  Disable weak ipv4 configuration.
+#
+#  Default:  0
+#
+# [*kernel_adv_ipv4_net_sysctl*]
+#  Improved advanced ipv4 network hardening.
+#
+#  Default: 1
+#
+# [*kernel_ipv6_disabled*]
+#  Disable ipv6.
+#
+#  Default: 1
+#
+# [*kernel_weak_ipv6_net_sysctl*]
+#  Disable weak ipv6 configuration.
+#
+#  Default:  0
+#
+# [*kernel_adv_ipv6_net_sysctl*]
+#  Improved advanced ipv6 network hardening.
+#
+#  Default:  1
+#
+# [*kernel_sysrq*]
+#  Enable sysreq.
+#
+#  Default:  0
+#
+# [*kernel_fs_suid_dumpable*]
+#  Disable core dump kernel setuid.
+#
+#  Default:  0
+#
+# [*kernel_kptr_restrict*]
+#  Cloak memory kernel address.
+#
+#  Default: 1
+#
+# [*kernel_dmesg_restrict*]
+#  Restrict access of buffer dmesg.
+#
+#  Default:  1
+#
+# [*kernel_perf_event_max_rate*]
+#  Restrict sub-system perf.
+#
+#  Default:  1
+#
+# [*$kernel_perf_cpu_time_max*]
+#  Restrict sub-system perf.
+#
+#  Default:  1
+#
+# [*kernel_perf_event_paranoid*]
+#  Restrict sub-system perf.
+#
+#  Default:  2
+#
+# [*kernel_pid_max*]
+#  Improved number of pid max.
+#
+#  Default:  65536
+#
+# [*kernel_randomize_va_space*]
+#  Randomize memorie address sapce.
+#
+#  Default:  2
+#
+# [*kernel_vm_mmap_min_addr*]
+#  Set minimum virtual address.
+#
+#  Default 65535
+#
+#
+### PACKAGES
+#
+#
+# [*package_libreswan*]
+#  Install libreswan.
+#
+#  Default:  true
+#
+# [*package_chrony*]
+#  Install chrony for auto-set date and time.
+#
+#  Default:  true
+#
+# [*package_screen*]
+#  Install screen.
+#
+#  Default:  false
+#
+#
+#### PAM
+#
+#
+# [*pam_login_defs*]
+#  Set password age on 90 days.
+#
+#  Default:  true
+#
+# [*pam_useradd*]
+#  Set default configuration for users creation.
+#
+#  Default:  true
+#
+# [*pam_pwdquality*]
+#  Improved passwors strenght.
+#
+#  Default:  true
+#
+# [*pam_system_auth*]
+#  Hardening pam system-auth.
+#
+#  Default:  true
+#
+# [*pam_password_auth*]
+#  Hardening pam password auth.
+#
+#  Default:  true
+#
+# [*pam_passwd*]
+#  Harden hash and rounds when user password is create.
+#
+#  Default:  true
+#
+#
+#### SSHD
+#
+# [*ssh_banner*]
+# Set ssh banner.
+#
+#  Default:  true
+#
+# [*ssh_strong_ciphers*]
+#  Set ssh strong encryption ciphers.
+#
+#  Default:  'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
+#
+# [*ssh_idle_timeout*]
+# Define ssh idle timeout.
+#
+#  Default: '900'
+#
+# [*ssh_strong_hmacs*]
+#  Set ssh strong encryption hmacs.
+#
+#  Default:  'hmac-sha2-512,hmac-sha2-256,hmac-sha1'
+#
+# [*ssh_only_ssh_2*]
+#  Set only use sshd version 2.
+#
+#  Default:  true
+#
+# [*ssh_disable_x11_forwarding*]
+#  Disable graphical x11 forwarding.
+#
+#  Default:  true
+#
+# [*ssh_disable_empty_password*]
+#  Disable sshd accept empty passsword.
+#
+#  Default:  true
+#
+# [*ssh_client_alive_count_max*]
+#  Set allow default param alive client.
+#
+#  Default:  '0'
+#
+# [*ssh_disable_user_env*]
+#  Disable env for sshd.
+#
+#  Default:  true
+#
+#
+# Author
 # -------
 #
-# Author Name <author@domain.com>
+# Diodonfrost keres@protonmail.com
 #
-# Copyright
+# Copyleft
 # ---------
 #
-# Copyright 2016 Your name here, unless otherwise noted.
+# Copyleft 2017.
 #
 class linux_hardening(
   # SELinux config
@@ -69,28 +366,28 @@ class linux_hardening(
   $audit_admin_action_low_disk  = true,
   $audit_action_low_disk        = true,
   $audit_flush_priority         = true,
-  $audit_syslog                 = true,
+  $audit_syslog                 = false,
 
   # Filesystem config hardening
   $filesystem_logfiles_perm     = '0600',
   $filesystem_hidden_process    = true,
 
   # Linux sysctl kernel hardening
-  $kernel_base_ipv4_net_sysctl  = [ 0 ],
-  $kernel_adv_ipv4_net_sysctl   = [ 1 ],
-  $kernel_ipv6_disabled         = [ 1 ],
-  $kernel_base_ipv6_net_sysctl  = [ 0 ],
-  $kernel_adv_ipv6_net_sysctl   = [ 1 ],
-  $kernel_sysrq                 = [ 0 ],
-  $kernel_fs_suid_dumpable      = [ 0 ],
-  $kernel_kptr_restrict         = [ 1 ],
-  $kernel_dmesg_restrict        = [ 1 ],
-  $kernel_perf_event_max_rate   = [ 1 ],
-  $kernel_perf_cpu_time_max     = [ 1 ],
-  $kernel_pid_max               = [ 65536 ],
-  $kernel_perf_event_paranoid   = [ 2 ],
-  $kernel_randomize_va_space    = [ 2 ],
-  $kernel_vm_mmap_min_addr      = [ 65536 ],
+  $kernel_weak_ipv4_net_sysctl  = '0',
+  $kernel_adv_ipv4_net_sysctl   = '1',
+  $kernel_ipv6_disabled         = '1',
+  $kernel_weak_ipv6_net_sysctl  = '0',
+  $kernel_adv_ipv6_net_sysctl   = '1',
+  $kernel_sysrq                 = '0',
+  $kernel_fs_suid_dumpable      = '0',
+  $kernel_kptr_restrict         = '1',
+  $kernel_dmesg_restrict        = '1',
+  $kernel_perf_event_max_rate   = '1',
+  $kernel_perf_cpu_time_max     = '1',
+  $kernel_pid_max               = '65536',
+  $kernel_perf_event_paranoid   = '2',
+  $kernel_randomize_va_space    = '2',
+  $kernel_vm_mmap_min_addr      = '65536',
 
   # Package for hardening system
   $package_libreswan            = true,
@@ -124,6 +421,7 @@ class linux_hardening(
     selinux_boolean_virt_use_usb => $selinux_boolean_virt_use_usb,
     selinux_boolean_deny_ptrace  => $selinux_boolean_deny_ptrace,
   }
+
   class { 'linux_hardening::audit':
     audit_access                => $audit_access ,
     audit_actions               => $audit_actions,
@@ -152,10 +450,10 @@ class linux_hardening(
   }
 
   class { 'linux_hardening::kernel':
-    kernel_base_ipv4_net_sysctl => $kernel_base_ipv4_net_sysctl,
+    kernel_weak_ipv4_net_sysctl => $kernel_weak_ipv4_net_sysctl,
     kernel_adv_ipv4_net_sysctl  => $kernel_adv_ipv4_net_sysctl,
     kernel_ipv6_disabled        => $kernel_ipv6_disabled,
-    kernel_base_ipv6_net_sysctl => $kernel_base_ipv6_net_sysctl,
+    kernel_weak_ipv6_net_sysctl => $kernel_weak_ipv6_net_sysctl,
     kernel_adv_ipv6_net_sysctl  => $kernel_adv_ipv6_net_sysctl,
     kernel_sysrq                => $kernel_sysrq,
     kernel_fs_suid_dumpable     => $kernel_fs_suid_dumpable,
