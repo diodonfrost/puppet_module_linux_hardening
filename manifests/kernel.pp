@@ -1,20 +1,20 @@
-
+# Hardening kernel by set sysctl.
 class linux_hardening::kernel(
-  $kernel_weak_ipv4_net_sysctl  = '0',
-  $kernel_adv_ipv4_net_sysctl   = '1',
-  $kernel_ipv6_disabled         = '1',
-  $kernel_weak_ipv6_net_sysctl  = '0',
-  $kernel_adv_ipv6_net_sysctl   = '1',
-  $kernel_sysrq                 = '0',
-  $kernel_fs_suid_dumpable      = '0',
-  $kernel_kptr_restrict         = '1',
-  $kernel_dmesg_restrict        = '1',
-  $kernel_perf_event_max_rate   = '1',
-  $kernel_perf_cpu_time_max     = '1',
-  $kernel_pid_max               = '65536',
-  $kernel_perf_event_paranoid   = '2',
-  $kernel_randomize_va_space    = '2',
-  $kernel_vm_mmap_min_addr      = '65536',
+  String $kernel_weak_ipv4_net_sysctl  = '0',
+  String $kernel_adv_ipv4_net_sysctl   = '1',
+  String $kernel_ipv6_disabled         = '1',
+  String $kernel_weak_ipv6_net_sysctl  = '0',
+  String $kernel_adv_ipv6_net_sysctl   = '1',
+  String $kernel_sysrq                 = '0',
+  String $kernel_fs_suid_dumpable      = '0',
+  String $kernel_kptr_restrict         = '1',
+  String $kernel_dmesg_restrict        = '1',
+  String $kernel_perf_event_max_rate   = '1',
+  String $kernel_perf_cpu_time_max     = '1',
+  String $kernel_pid_max               = '65536',
+  String $kernel_perf_event_paranoid   = '2',
+  String $kernel_randomize_va_space    = '2',
+  String $kernel_vm_mmap_min_addr      = '65536',
   ) {
 
   # Sysctl hardening

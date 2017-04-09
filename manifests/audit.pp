@@ -1,43 +1,60 @@
+# hardening audit
 class linux_hardening::audit (
 
-  $audit_access                = true,
-  $audit_actions               = true,
-  $audit_networkconfig         = true,
-  $audit_usergroup             = true,
-  $audit_time                  = true,
-  $audit_delete                = true,
-  $audit_export                = true,
-  $audit_immutable             = true,
-  $audit_logins                = true,
-  $audit_mac_policy            = true,
-  $audit_modules               = true,
-  $audit_perm_mod              = true,
-  $audit_privileged            = true,
-  $audit_session               = true,
-  $audit_time_change           = true,
-  $audit_admin_action_low_disk = true,
-  $audit_action_low_disk       = true,
-  $audit_flush_priority        = true,
-  $audit_syslog                = true,
+  Boolean $audit_access,
+  Boolean $audit_actions,
+  Boolean $audit_networkconfig,
+  Boolean $audit_usergroup,
+  Boolean $audit_time,
+  Boolean $audit_delete,
+  Boolean $audit_export,
+  Boolean $audit_immutable,
+  Boolean $audit_logins,
+  Boolean $audit_mac_policy,
+  Boolean $audit_modules,
+  Boolean $audit_perm_mod,
+  Boolean $audit_privileged,
+  Boolean $audit_session,
+  Boolean $audit_time_change,
+  Boolean $audit_admin_action_low_disk,
+  Boolean $audit_action_low_disk,
+  Boolean $audit_flush_priority,
+  Boolean $audit_syslog,
   ) {
 
   package { 'audit':
-    ensure   => 'latest',
-    provider => 'yum',
+    ensure   => present,
   }
 
   service { 'auditd':
-    ensure  => 'running',
+    ensure  => running,
     enable  => true,
     require =>  Package['audit'],
   }
 
-  # Audit rules configuration
+  # systemctl restart auditd doesn't work, instead of use service auditd restart.
+  exec { 'service auditd restart':
+    path        => '/usr/local/bin/:/bin/:/usr/sbin/',
+    provider    => 'shell',
+    refreshonly => true,
+  }
+
+  # Configure auditd to use audispd's syslog plugin.
+  ini_setting {'use audit with syslog':
+    ensure            => present,
+    key_val_separator => ' = ',
+    path              => '/etc/audisp/plugins.d/syslog.conf',
+    setting           => 'active',
+    value             => 'yes',
+    notify            => Exec['service auditd restart'],
+  }
+
+  # Audit rules configuration.
   file {
     default:
-      owner   => root,
-      group   => root,
-      require => Service['auditd'],
+      owner  => root,
+      group  => root,
+      notify => Exec['service auditd restart'],
     ;
     '/etc/audit/rules.d/access.rules':
       ensure => bool2str($audit_access, 'present', 'absent'),
@@ -125,12 +142,11 @@ class linux_hardening::audit (
     require => Service['auditd'],
   }
 
-  file_line { 'Configure auditd to use audispd syslog plugin':
-    ensure  => bool2str($audit_syslog, 'present', 'absent'),
-    path    => '/etc/audisp/plugins.d/syslog.conf',
-    match   => '^active =',
-    line    => 'active = yes',
-    require => Service['auditd'],
+  # Configure logrotate daily.
+  file_line { 'enable logrotate all days':
+    ensure => present,
+    path   => '/etc/logrotate.conf',
+    match  => '^daily',
+    line   => 'daily',
   }
-
 }

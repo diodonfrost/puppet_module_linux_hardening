@@ -231,55 +231,13 @@
 ### PACKAGES
 #
 #
-# [*package_libreswan*]
-#  Install libreswan.
-#
-#  Default:  true
-#
-# [*package_chrony*]
-#  Install chrony for auto-set date and time.
-#
-#  Default:  true
-#
-# [*package_screen*]
-#  Install screen.
-#
-#  Default:  false
-#
-#
 #### PAM
 #
-#
-# [*pam_login_defs*]
-#  Set password age on 90 days.
-#
-#  Default:  true
-#
-# [*pam_useradd*]
-#  Set default configuration for users creation.
-#
-#  Default:  true
-#
-# [*pam_pwdquality*]
+# [*pam_pwquality_settings*]
 #  Improved passwors strenght.
 #
-#  Default:  true
-#
-# [*pam_system_auth*]
-#  Hardening pam system-auth.
-#
-#  Default:  true
-#
-# [*pam_password_auth*]
-#  Hardening pam password auth.
-#
-#  Default:  true
-#
-# [*pam_passwd*]
-#  Harden hash and rounds when user password is create.
-#
-#  Default:  true
-#
+# [*pam_login_defs*]
+#  Set timeout for incativity.
 #
 #### SSHD
 #
@@ -288,46 +246,8 @@
 #
 #  Default:  true
 #
-# [*ssh_strong_ciphers*]
-#  Set ssh strong encryption ciphers.
-#
-#  Default:  'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
-#
-# [*ssh_idle_timeout*]
-# Define ssh idle timeout.
-#
-#  Default: '900'
-#
-# [*ssh_strong_hmacs*]
-#  Set ssh strong encryption hmacs.
-#
-#  Default:  'hmac-sha2-512,hmac-sha2-256,hmac-sha1'
-#
-# [*ssh_only_ssh_2*]
-#  Set only use sshd version 2.
-#
-#  Default:  true
-#
-# [*ssh_disable_x11_forwarding*]
-#  Disable graphical x11 forwarding.
-#
-#  Default:  true
-#
-# [*ssh_disable_empty_password*]
-#  Disable sshd accept empty passsword.
-#
-#  Default:  true
-#
-# [*ssh_client_alive_count_max*]
-#  Set allow default param alive client.
-#
-#  Default:  '0'
-#
-# [*ssh_disable_user_env*]
-#  Disable env for sshd.
-#
-#  Default:  true
-#
+# [*ssh_settings*]
+#  Configure service sshd settings.
 #
 # Author
 # -------
@@ -341,77 +261,79 @@
 #
 class linux_hardening(
   # SELinux config
-  $selinux_mode                 = 'enforcing',
-  $selinux_boolean_execstack    = false,
-  $selinux_boolean_execheap     = false,
-  $selinux_boolean_virt_use_usb = false,
-  $selinux_boolean_deny_ptrace  = true,
+  $selinux_mode                  = 'enforcing',
+  $selinux_boolean_execstack     = false,
+  $selinux_boolean_execheap      = false,
+  $selinux_boolean_virt_use_usb  = false,
+  $selinux_boolean_deny_ptrace   = true,
 
   # Audit config
-  $audit_access                 = true,
-  $audit_actions                = true,
-  $audit_networkconfig          = true,
-  $audit_usergroup              = true,
-  $audit_time                   = true,
-  $audit_delete                 = true,
-  $audit_export                 = true,
-  $audit_immutable              = true,
-  $audit_logins                 = true,
-  $audit_mac_policy             = true,
-  $audit_modules                = true,
-  $audit_perm_mod               = true,
-  $audit_privileged             = true,
-  $audit_session                = true,
-  $audit_time_change            = true,
-  $audit_admin_action_low_disk  = true,
-  $audit_action_low_disk        = true,
-  $audit_flush_priority         = true,
-  $audit_syslog                 = false,
+  $audit_access                  = true,
+  $audit_actions                 = true,
+  $audit_networkconfig           = true,
+  $audit_usergroup               = true,
+  $audit_time                    = true,
+  $audit_delete                  = true,
+  $audit_export                  = true,
+  $audit_immutable               = true,
+  $audit_logins                  = true,
+  $audit_mac_policy              = true,
+  $audit_modules                 = true,
+  $audit_perm_mod                = true,
+  $audit_privileged              = true,
+  $audit_session                 = true,
+  $audit_time_change             = true,
+  $audit_admin_action_low_disk   = true,
+  $audit_action_low_disk         = true,
+  $audit_flush_priority          = true,
+  $audit_syslog                  = false,
 
   # Filesystem config hardening
-  $filesystem_logfiles_perm     = '0600',
-  $filesystem_hidden_process    = true,
+  $filesystem_logfiles_perm      = '0600',
+  $filesystem_hidden_process     = true,
 
   # Linux sysctl kernel hardening
-  $kernel_weak_ipv4_net_sysctl  = '0',
-  $kernel_adv_ipv4_net_sysctl   = '1',
-  $kernel_ipv6_disabled         = '1',
-  $kernel_weak_ipv6_net_sysctl  = '0',
-  $kernel_adv_ipv6_net_sysctl   = '1',
-  $kernel_sysrq                 = '0',
-  $kernel_fs_suid_dumpable      = '0',
-  $kernel_kptr_restrict         = '1',
-  $kernel_dmesg_restrict        = '1',
-  $kernel_perf_event_max_rate   = '1',
-  $kernel_perf_cpu_time_max     = '1',
-  $kernel_pid_max               = '65536',
-  $kernel_perf_event_paranoid   = '2',
-  $kernel_randomize_va_space    = '2',
-  $kernel_vm_mmap_min_addr      = '65536',
+  $kernel_weak_ipv4_net_sysctl   = '0',
+  $kernel_adv_ipv4_net_sysctl    = '1',
+  $kernel_ipv6_disabled          = '1',
+  $kernel_weak_ipv6_net_sysctl   = '0',
+  $kernel_adv_ipv6_net_sysctl    = '1',
+  $kernel_sysrq                  = '0',
+  $kernel_fs_suid_dumpable       = '0',
+  $kernel_kptr_restrict          = '1',
+  $kernel_dmesg_restrict         = '1',
+  $kernel_perf_event_max_rate    = '1',
+  $kernel_perf_cpu_time_max      = '1',
+  $kernel_pid_max                = '65536',
+  $kernel_perf_event_paranoid    = '2',
+  $kernel_randomize_va_space     = '2',
+  $kernel_vm_mmap_min_addr       = '65536',
 
   # Package for hardening system
-  $package_libreswan            = true,
-  $package_chrony               = true,
-  $package_screen               = false,
+  $package_ntp_servers           = ['0.rhel.pool.ntp.org', '1.rhel.pool.ntp.org', '2.rhel.pool.ntp.org', '3.rhel.pool.ntp.org'],
 
   # Hardening PAM
-  $pam_login_defs               = true,
-  $pam_useradd                  = true,
-  $pam_pwdquality               = true,
-  $pam_system_auth              = false,
-  $pam_password_auth            = false,
-  $pam_passwd                   = false,
+  $pam_pwquality_settings        = { 'dcredit' => '-1',
+                                     'minlen'  => '7',
+                                     'ucredit' => '-1',
+                                     'lcredit' => '-1',
+                                     'ocredit' => '-1',
+                                     'difok'   => '7', },
+  $pam_login_defs                = { 'PASS_MAX_DAYS'  => '90',
+                                     'PASS_MIN_DAYS'  => '1',
+                                     'ENCRYPT_METHOD' => 'SHA512', },
 
   # Hardening sshd
-  $ssh_banner                  = true,
-  $ssh_strong_ciphers          = 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc',
-  $ssh_idle_timeout            = '900',
-  $ssh_strong_hmacs            = 'hmac-sha2-512,hmac-sha2-256,hmac-sha1',
-  $ssh_only_ssh_2              = true,
-  $ssh_disable_x11_forwarding  = true,
-  $ssh_disable_empty_password  = true,
-  $ssh_client_alive_count_max  = '0',
-  $ssh_disable_user_env        = true,
+  $ssh_banner                    = true,
+  Hash[String, Any]$ssh_settings = { 'Ciphers'               => 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc',
+                                     'ClientAliveInterval'   => '900',
+                                     'MACs'                  => 'hmac-sha2-512,hmac-sha2-256,hmac-sha1',
+                                     'Protocol'              => '2',
+                                     'X11Forwarding'         => 'no',
+                                     'PermitEmptyPasswords'  => 'no',
+                                     'ClientAliveCountMax'   => '0',
+                                     'PermitUserEnvironment' => 'no',
+                                     'PermitRootLogin'       => 'no', },
 
 ) {
   class { 'linux_hardening::selinux':
@@ -468,30 +390,19 @@ class linux_hardening(
   }
 
   class { 'linux_hardening::packages':
-    package_libreswan => $package_libreswan,
-    package_chrony    => $package_chrony,
-    package_screen    => $package_screen,
+    package_ntp_servers => $package_ntp_servers,
   }
 
   class { 'linux_hardening::pam':
-    pam_login_defs    => $pam_login_defs,
-    pam_useradd       => $pam_useradd,
-    pam_pwdquality    => $pam_pwdquality,
-    pam_system_auth   => $pam_system_auth,
-    pam_password_auth => $pam_password_auth,
-    pam_passwd        => $pam_passwd,
+    pam_pwquality_settings => $pam_pwquality_settings,
+    pam_login_defs         => $pam_login_defs,
   }
 
-  class { 'linux_hardening::sshd':
-    ssh_banner                 => $ssh_banner,
-    ssh_strong_ciphers         => $ssh_strong_ciphers,
-    ssh_idle_timeout           => $ssh_idle_timeout,
-    ssh_strong_hmacs           => $ssh_strong_hmacs,
-    ssh_only_ssh_2             => $ssh_only_ssh_2,
-    ssh_disable_x11_forwarding => $ssh_disable_x11_forwarding,
-    ssh_disable_empty_password => $ssh_disable_empty_password,
-    ssh_client_alive_count_max => $ssh_client_alive_count_max,
-    ssh_disable_user_env       => $ssh_disable_user_env,
-
+  class { 'linux_hardening::ssh':
+    ssh_banner   => $ssh_banner,
+    ssh_settings => $ssh_settings,
   }
+
+  class { 'linux_hardening::aide':}
+
 }

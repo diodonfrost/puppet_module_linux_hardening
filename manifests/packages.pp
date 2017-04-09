@@ -1,35 +1,11 @@
-
+# Hardening package
 class linux_hardening::packages(
-  $package_libreswan = true,
-  $package_chrony    = true,
-  $package_screen    = false,
+  $package_ntp_servers,
 
 ) {
-  if $package_libreswan == true {
-    package { 'libreswan':
-      ensure   => 'latest',
-      provider => 'yum',
-    }
-  }
 
-  if $package_chrony == true {
-    package { 'chrony':
-      ensure   => 'latest',
-      provider => 'yum',
-    }
+  # Set multiple ntp servers.
+  class { '::ntp':
+    servers => [ '0.rhel.pool.ntp.org', '1.rhel.pool.ntp.org', '2.rhel.pool.ntp.org', '3.rhel.pool.ntp.org'],
   }
-
-  service { 'chronyd':
-    ensure  => 'running',
-    enable  => true,
-    require => Package['chrony'],
-  }
-
-  if $package_screen == true {
-    package { 'screen':
-      ensure   => 'latest',
-      provider => 'yum',
-    }
-  }
-
 }

@@ -1,7 +1,7 @@
-
+# Hardening filesystem
 class linux_hardening::filesystem (
-  $filesystem_logfiles_perm  = '0600',
-  $filesystem_hidden_process = true,
+  String $filesystem_logfiles_perm  = '0600',
+  Boolean $filesystem_hidden_process = true,
   ) {
 
   # Set permission on filelog

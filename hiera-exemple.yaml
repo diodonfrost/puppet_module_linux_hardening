@@ -1,74 +1,78 @@
 ---
  # SELinux config
-selinux_mode: 'enforcing'
-selinux_boolean_execstack: false
-selinux_boolean_execheap: false
-selinux_boolean_virt_use_usb: false
-selinux_boolean_deny_ptrace: true
+linux_hardening::selinux_mode: 'enforcing'
+linux_hardening::selinux_boolean_execstack: false
+linux_hardening::selinux_boolean_execheap: false
+linux_hardening::selinux_boolean_virt_use_usb: false
+linux_hardening::selinux_boolean_deny_ptrace: true
 
 # Audit config
-audit_access: true
-audit_actions: true
-audit_networkconfig: true
-audit_usergroup: true
-audit_time: true
-audit_delete: true
-audit_export: true
-audit_immutable: true
-audit_logins: true
-audit_mac_policy: true
-audit_modules: true
-audit_perm_mod: true
-audit_privileged: true
-audit_session: true
-audit_time_change: true
-audit_admin_action_low_disk : true
-audit_action_low_disk: true
-audit_flush_priority: true
-audit_syslog: true
+linux_hardening::audit_access: true
+linux_hardening::audit_actions: true
+linux_hardening::audit_networkconfig: true
+linux_hardening::audit_usergroup: true
+linux_hardening::audit_time: true
+linux_hardening::audit_delete: true
+linux_hardening::audit_export: true
+linux_hardening::audit_immutable: true
+linux_hardening::audit_logins: true
+linux_hardening::audit_mac_policy: true
+linux_hardening::audit_modules: true
+linux_hardening::audit_perm_mod: true
+linux_hardening::audit_privileged: true
+linux_hardening::audit_session: true
+linux_hardening::audit_time_change: true
+linux_hardening::audit_admin_action_low_disk : true
+linux_hardening::audit_action_low_disk: true
+linux_hardening::audit_flush_priority: true
+linux_hardening::audit_syslog: true
 
 # Filesystem config hardening
 filesystem_logfiles_perm: '0600'
 filesystem_hidden_process: true
 
 # Linux sysctl kernel hardening
-kernel_weak_ipv4_net_sysctl: '0'
-kernel_adv_ipv4_net_sysctl: '1'
-kernel_ipv6_disabled: '1'
-kernel_weak_ipv6_net_sysctl: '0'
-kernel_adv_ipv6_net_sysctl: '1'
-kernel_sysrq: '0'
-kernel_fs_suid_dumpable: '0'
-kernel_kptr_restrict: '1'
-kernel_dmesg_restrict: '1'
-kernel_perf_event_max_rate: '1'
-kernel_perf_cpu_time_max: '1'
-kernel_pid_max: '65536'
-kernel_perf_event_paranoid: '2'
-kernel_randomize_va_space: '2'
-kernel_vm_mmap_min_addr: '65536'
+linux_hardening::kernel_weak_ipv4_net_sysctl: '0'
+linux_hardening::kernel_adv_ipv4_net_sysctl: '1'
+linux_hardening::kernel_ipv6_disabled: '1'
+linux_hardening::kernel_weak_ipv6_net_sysctl: '0'
+linux_hardening::kernel_adv_ipv6_net_sysctl: '1'
+linux_hardening::kernel_sysrq: '0'
+linux_hardening::kernel_fs_suid_dumpable: '0'
+linux_hardening::kernel_kptr_restrict: '1'
+linux_hardening::kernel_dmesg_restrict: '1'
+linux_hardening::kernel_perf_event_max_rate: '1'
+linux_hardening::kernel_perf_cpu_time_max: '1'
+linux_hardening::kernel_pid_max: '65536'
+linux_hardening::kernel_perf_event_paranoid: '2'
+linux_hardening::kernel_randomize_va_space: '2'
+linux_hardening::kernel_vm_mmap_min_addr: '65536'
 
 # Package for hardening system
-package_libreswan: true
-package_chrony: true
-package_screen: false
+linux_hardening::package_ntp_servers: ['0.rhel.pool.ntp.org', '1.rhel.pool.ntp.org', '2.rhel.pool.ntp.org', '3.rhel.pool.ntp.org']
 
 # Hardening PAM
-pam_login_defs: true
-pam_useradd: true
-pam_pwdquality: true
-pam_system_auth: false
-pam_password_auth: false
-pam_passwd: false
+linux_hardening::pam::pam_pwquality_settings:
+  dcredit: '-1'
+  minlen: '7'
+  ucredit: '-1'
+  lcredit: '-1'
+  ocredit: '-1'
+  difok: '7'
+linux_hardening::pam::pam_login_defs:
+  PASS_MAX_DAYS: '90'
+  PASS_MIN_DAYS: '1'
+  ENCRYPT_METHOD: 'SHA512'
 
 # Hardening sshd
-ssh_banner: true
-ssh_strong_ciphers: 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
-ssh_idle_timeout: '900'
-ssh_strong_hmacs: 'hmac-sha2-512,hmac-sha2-256,hmac-sha1'
-ssh_only_ssh_2: true
-ssh_disable_x11_forwarding: true
-ssh_disable_empty_password: true
-ssh_client_alive_count_max: '0'
-ssh_disable_user_env: true
+linux_hardening::ssh_banner: true
+linux_hardening::ssh::ssh_settings:
+  Ciphers: 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
+  ClientAliveInterval: '900'
+  MACs: 'hmac-sha2-512,hmac-sha2-256,hmac-sha1'
+  Protocol: '2'
+  X11Forwarding: 'no'
+  PermitEmptyPasswords: 'no'
+  ClientAliveCountMax: '0'
+  PermitUserEnvironment: 'no'
 
