@@ -1,5 +1,5 @@
 # Hardening ssh
-class linux_hardening::ssh (
+class linux_hardening::services::ssh (
     Boolean $ssh_banner,
     Hash[String, Any] $ssh_settings,
 ) {

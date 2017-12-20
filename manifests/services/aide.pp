@@ -1,5 +1,5 @@
 # Install and configure aide.
-class linux_hardening::aide (
+class linux_hardening::services::aide (
 
 ) {
 

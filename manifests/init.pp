@@ -139,7 +139,7 @@
 #
 #
 # [*filesystem_logfiles_perm*]
-#  Set permissions on: /var/log/messages 
+#  Set permissions on: /var/log/messages
 #                      /var/log/secure
 #                      /var/log/maillog
 #                      /var/log/spooler
@@ -389,7 +389,7 @@ class linux_hardening(
     kernel_vm_mmap_min_addr     => $kernel_vm_mmap_min_addr,
   }
 
-  class { 'linux_hardening::packages':
+  class { 'linux_hardening::services::ntp':
     package_ntp_servers => $package_ntp_servers,
   }
 
@@ -398,11 +398,11 @@ class linux_hardening(
     pam_login_defs         => $pam_login_defs,
   }
 
-  class { 'linux_hardening::ssh':
+  class { 'linux_hardening::services::ssh':
     ssh_banner   => $ssh_banner,
     ssh_settings => $ssh_settings,
   }
 
-  class { 'linux_hardening::aide':}
+  class { 'linux_hardening::services::aide':}
 
 }

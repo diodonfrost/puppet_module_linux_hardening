@@ -1,0 +1,8 @@
+fixtures:
+  repositories:
+    stdlib:  "https://github.com/puppetlabs/puppetlabs-stdlib"
+    inifile: "https://github.com/puppetlabs/puppetlabs-inifile"
+    concat:  "https://github.com/puppetlabs/puppetlabs-concat"
+    sysctl:  "https://github.com/puppet-sysctl"
+    augeas_core: "https://github.com/hercules-team/augeas_core"
+    augeas_pam: "https://github.com/hercules-team/augeas_pam"
