@@ -25,10 +25,13 @@ describe 'roles class' do
     it { is_expected.to be_enabled }
   end
 
-  # Test audit service
-  describe service("auditd") do
-    it { is_expected.to be_running }
-    it { is_expected.to be_enabled }
+
+  describe('kernel log', unless: fact('virtual') == 'docker') do
+    # Test audit service
+    describe service("auditd") do
+      it { is_expected.to be_running }
+      it { is_expected.to be_enabled }
+    end
   end
 
   # Test indempotence
